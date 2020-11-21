@@ -4,3 +4,6 @@
 [submodule "bundle/vim-osc52"]
 	path = bundle/vim-osc52
 	url = git@github.com:fcpg/vim-osc52.git
+[submodule "bundle/vim-dirdiff"]
+	path = bundle/vim-dirdiff
+	url = git://github.com/will133/vim-dirdiff.git
