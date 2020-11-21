@@ -1,0 +1,6 @@
+[submodule "bundle/dracula"]
+	path = bundle/dracula
+	url = git@github.com:dracula/vim.git
+[submodule "bundle/vim-osc52"]
+	path = bundle/vim-osc52
+	url = git@github.com:fcpg/vim-osc52.git

@@ -7,4 +7,4 @@ set gfn=Monospace\ 12
 " set lines=81 columns=252
 set lines=55 columns=155
 winpos 1 1 
-colorscheme xylor
+" colorscheme xylor

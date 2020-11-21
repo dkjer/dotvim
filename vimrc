@@ -32,11 +32,14 @@ if &term =~ "xterm-debian" || &term =~ "xterm-xfree86"
   set t_Sb=[4%dm
 endif
 
+" Enable true color
+let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
+let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
+set termguicolors
+
 " Make p in Visual mode replace the selected text with the "" register.
 vnoremap p <Esc>:let current_reg = @"<CR>gvdi<C-R>=current_reg<CR><Esc>
 
-" Vim5 and later versions support syntax highlighting. Uncommenting the next
-" line enables syntax highlighting by default.
 syntax on
 
 if has("autocmd")
@@ -90,26 +93,6 @@ if &diff
     au VimEnter * exec "normal \]c"
 endif
 
-" some specific navigation commands
-"command! Works :cd ~/linden/indra/newsim
-"command! Workv :cd ~/linden/indra/newview
-"command! Workp :cd ~/linden/indra/newspace
-"command! Workd :cd ~/linden/indra/dataserver
-"command! Worku :cd ~/linden/indra/userserver
-"command! Workc :cd ~/linden/common
-"command! Worki :cd ~/linden/include
-"command! Workm :cd ~/linden/scripts/messages
-"
-"command! Branchs :cd ~/branch/linden/indra/newsim
-"command! Branchv :cd ~/branch/linden/indra/newview
-"command! Branchp :cd ~/branch/linden/indra/newspace
-"command! Branchd :cd ~/branch/linden/indra/dataserver
-"command! Branchu :cd ~/branch/linden/indra/userserver
-"command! Branchc :cd ~/branch/linden/common
-"command! Branchi :cd ~/branch/linden/include
-"command! Branchm :cd ~/branch/linden/scripts/messages
-
-
 " quick jump to the other C++ file
 command! Cfile :e %:r.cpp
 command! Hfile :e %:r.h
@@ -123,7 +106,7 @@ command! Hvsplit :vsplit %:r.h
 command! Diff :VCSVimDiff
 
 " Set up ctags
-set tags=./tags,tags,~/linden/tags
+" set tags=./tags,tags,~/linden/tags
 
 " Map ,t to rebuild ctags in the current directory.
 nmap ,t :!(cd %:p:h;ctags *.{cpp,h})&<CR><CR>
@@ -155,11 +138,6 @@ set hlsearch
 set diffopt=filler,context:3000,iwhite
 set formatoptions=qln
 
-" colorscheme ChocolateLiquor
-" colorscheme xylor
-" colorscheme carvedwood
-colorscheme jellybeans
-
 map t :cn<Enter>
 map T :cp<Enter>
 
@@ -181,12 +159,32 @@ let VCSCommandSplit = 'vertical'
 "    set laststatus=2
 "endif
 """""""""""""""""" POWERLINE """""""""""""""""
-set t_Co=256
 
 "if isdirectory($GOPATH)
 "  call pathogen#infect() 
 "endif
 
+set ttymouse=xterm2
+set mouse=a
+
+vmap <C-c> y:Oscyank<cr>
+xmap <F7> y:Oscyank<cr>
+
+nmap <F12> :call <SID>SynStack()<CR>
+function! <SID>SynStack()
+  if !exists("*synstack")
+    return
+  endif
+  echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
+endfunc
+
+
 execute pathogen#infect()
 
+" colorscheme ChocolateLiquor
+" colorscheme xylor
+" colorscheme carvedwood
+" colorscheme jellybeans
+colorscheme dracula
+highlight Normal ctermbg=None
 
