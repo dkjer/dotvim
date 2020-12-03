@@ -15,39 +15,40 @@ set tabstop=4
 set shiftwidth=4
 set softtabstop=4
 set expandtab
-set list lcs=trail:·,tab:»·     " Show tabs and trailing spaces
+if has("mouse")  " Don't show tabs/trailing spaces if copy/paste will show them
+    set list lcs=trail:·,tab:»· " Show tabs and trailing spaces
+endif
 set encoding=utf-8
 set scrolloff=3
 set autoindent                  " always set autoindenting on
-set showmode
-set showcmd                     " Show (partial) command in status line.
 set wildmenu
 set wildmode=longest:full,full
 set ttyfast
 
-set ruler                       " show the cursor position all the time
-set backspace=indent,eol,start  " more powerful backspacing
-"set number
-"set relativenumber
-"set noundofile
-"nnoremap / /\v
-"vnoremap / /\v
-"set ignorecase
-"set smartcase
+set noundofile                  " Don't keep undo files
+set nobackup                    " Don't keep backup files
+" search using 'very magic' patterns
+nnoremap / /\v
+vnoremap / /\v
+set ignorecase                  " Ignore case during search
+set smartcase                   " ... unless searching for a mix of upper/lower
 "set gdefault
 set incsearch                   " Incremental search
 set showmatch                   " Show matching brackets.
 set hlsearch                    " Highlight search matches
 " Mapping to remove search highlights
-let mapleader = ";"
-nnoremap <leader><space> :noh<cr>
+if has("user_commands")
+    let mapleader = ";"
+    nnoremap <leader><space> :noh<cr>
+endif " has("user_commands")
 nnoremap <TAB> %
 vnoremap <TAB> %
 set wrap
-"set linebreak
-"set nolist
-"set formatoptions=qrn1
-"set spell spelllang=en_us
+set linebreak
+set formatoptions=qrn1
+" Set spelling language, but turn it off by default.
+set spell spelllang=en_us
+set nospell
 "set autowrite  " Automatically save before commands like :next and :make
 
 " Suffixes that get lower priority when doing tab completion for filenames.
@@ -80,19 +81,20 @@ endif " has("autocmd")
 
 " Aesthetics
 
-
-" Enable true color
 set t_Co=256
-let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
-let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
-set termguicolors
+if has("termguicolors")
+    " Enable true color
+    let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
+    let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
+    set termguicolors
 
-packadd! dracula
-if !exists("g:syntax_on")
-    syntax enable
-endif
-colorscheme dracula
-highlight Normal ctermbg=None
+    packadd! dracula
+    if !exists("g:syntax_on")
+        syntax enable
+    endif
+    colorscheme dracula
+    highlight Normal ctermbg=None
+endif " has("termguicolors")
 
 " Highlight any characters in lines that are too long.
 "set colorcolumn=81
@@ -103,52 +105,42 @@ highlight Normal ctermbg=None
 "  augroup END
 "endif " has("autocmd")
 
-"" Mappings and shortcuts
-"
-"" Miscellaneous 
-"
-"inoremap <F1> <ESC>
-"nnoremap <F1> <ESC>
-"vnoremap <F1> <ESC>
-"au FocusLost * :wa
-"vnoremap . :norm.<CR>
-"
-"" Leader shortcuts
-"
-"let mapleader = ","
-"nnoremap <leader>W :%s/\s\+$//<cr>:let @/=''<CR>
-"nnoremap <leader>a :Ack
-"nnoremap <leader>ft Vatzf
-"nnoremap <leader>S ?{<CR>jV/^\s*\}?$<CR>k:sort<CR>:noh<CR>
-"nnoremap <leader>q gqip
-"nnoremap <leader>v V`]
-"nnoremap <leader>ev <C-w><C-v><C-l>:e $MYVIMRC<cr>
-"nnoremap <leader>w <C-w>v<C-w>l
-"nnoremap <leader>j VipJ
-"nnoremap <leader>q gqip
-"nnoremap <leader>f 1z=
-"nnoremap <leader>s ]s
-"nnoremap <leader>u :!git pull website master && git commit -am 'Standard commit.' && git push website master<CR><CR>
-"nnoremap <leader>p :!git commit -am 'Standard commit.' && git push origin master<CR><CR>
-"nnoremap <leader>d :read !date<CR>
-"nnoremap <leader>r :!!<CR>
-"nnoremap <leader>m :normal @a
-"nnoremap <leader>l :CtrlP<CR>
-"nnoremap <leader>nt :NERDTree<CR>
-"nnoremap <leader>s :set spell!<CR>
-"nnoremap <leader>n :set nonumber!<CR>
-"nnoremap <leader>rn :set norelativenumber!<CR>
-"nnoremap <leader>c :nohl<CR>
-"nnoremap <leader>pa :set nopaste!<CR>
-"nnoremap <leader>rc :so $MYVIMRC<CR>
-"nnoremap <leader>b :BlogSave publish<CR>
-""nnoremap <leader>r :! /Users/daniel/Documents/whup.sh<CR><CR>
-"nnoremap <leader>h :set ft=HTML<CR><CR>
-"
-"" Control shortcuts
-"
-"nnoremap <C-h> <C-w>h
-"nnoremap <C-j> <C-w>j
-"nnoremap <C-k> <C-w>k
-"nnoremap <C-l> <C-w>l
+" Mappings and shortcuts
+
+" Leader shortcuts
+
+nnoremap <leader>a :Ack
+nnoremap <leader>ft Vatzf
+nnoremap <leader>S ?{<CR>jV/^\s*\}?$<CR>k:sort<CR>:noh<CR>
+nnoremap <leader>q gqip
+nnoremap <leader>v V`]
+nnoremap <leader>ev <C-w><C-v><C-l>:e $MYVIMRC<cr>
+nnoremap <leader>w <C-w>v<C-w>l
+nnoremap <leader>j VipJ
+nnoremap <leader>q gqip
+nnoremap <leader>f 1z=
+nnoremap <leader>s ]s
+nnoremap <leader>u :!git pull website master && git commit -am 'Standard commit.' && git push website master<CR><CR>
+nnoremap <leader>p :!git commit -am 'Standard commit.' && git push origin master<CR><CR>
+nnoremap <leader>d :read !date<CR>
+nnoremap <leader>r :!!<CR>
+nnoremap <leader>m :normal @a
+nnoremap <leader>l :CtrlP<CR>
+nnoremap <leader>nt :NERDTree<CR>
+nnoremap <leader>s :set spell!<CR>
+nnoremap <leader>n :set nonumber!<CR>
+nnoremap <leader>rn :set norelativenumber!<CR>
+nnoremap <leader>c :nohl<CR>
+nnoremap <leader>pa :set nopaste!<CR>
+nnoremap <leader>rc :so $MYVIMRC<CR>
+nnoremap <leader>b :BlogSave publish<CR>
+"nnoremap <leader>r :! /Users/daniel/Documents/whup.sh<CR><CR>
+nnoremap <leader>h :set ft=HTML<CR><CR>
+
+" Control shortcuts
+
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
 
