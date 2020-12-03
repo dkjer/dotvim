@@ -1,190 +1,154 @@
 " Configuration file for vim
 
+" Basic Settings
+
+set shell=/bin/zsh
+set clipboard^=unnamed,unnamedplus
+" Normally we use vim-extensions. If you want true vi-compatibility
+" remove change the following statements
+set nocompatible
 " Prevent modelines in files from being evaluated (avoids a potential
 " security problem wherein a malicious user could write a hazardous
 " modeline into a file) (override default value of 5)
 set modelines=0
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
+set expandtab
+set list lcs=trail:·,tab:»·     " Show tabs and trailing spaces
+set encoding=utf-8
+set scrolloff=3
+set autoindent                  " always set autoindenting on
+set showmode
+set showcmd                     " Show (partial) command in status line.
+set wildmenu
+set wildmode=longest:full,full
+set ttyfast
 
-" Normally we use vim-extensions. If you want true vi-compatibility
-" remove change the following statements
-set nocompatible	" Use Vim defaults instead of 100% vi compatibility
-set backspace=indent,eol,start	" more powerful backspacing
-
-" Now we set some defaults for the editor 
-set autoindent		" always set autoindenting on
-set textwidth=0		" Don't wrap words by default
-set nobackup		" Don't keep a backup file
-set viminfo='20,\"50	" read/write a .viminfo file, don't store more than
-			" 50 lines of registers
-set history=50		" keep 50 lines of command line history
-set ruler		" show the cursor position all the time
-set foldlevelstart=99
+set ruler                       " show the cursor position all the time
+set backspace=indent,eol,start  " more powerful backspacing
+"set number
+"set relativenumber
+"set noundofile
+"nnoremap / /\v
+"vnoremap / /\v
+"set ignorecase
+"set smartcase
+"set gdefault
+set incsearch                   " Incremental search
+set showmatch                   " Show matching brackets.
+set hlsearch                    " Highlight search matches
+" Mapping to remove search highlights
+let mapleader = ";"
+nnoremap <leader><space> :noh<cr>
+nnoremap <TAB> %
+vnoremap <TAB> %
+set wrap
+"set linebreak
+"set nolist
+"set formatoptions=qrn1
+"set spell spelllang=en_us
+"set autowrite  " Automatically save before commands like :next and :make
 
 " Suffixes that get lower priority when doing tab completion for filenames.
 " These are files we are not likely to want to edit or read.
 set suffixes=.bak,~,.swp,.o,.info,.aux,.log,.dvi,.bbl,.blg,.brf,.cb,.ind,.idx,.ilg,.inx,.out,.toc
+set diffopt=filler,context:3000,iwhite
 
-" We know xterm-debian is a color terminal
-set t_Co=256
-if &term =~ "xterm-debian" || &term =~ "xterm-xfree86"
-  set t_Co=16
-  set t_Sf=[3%dm
-  set t_Sb=[4%dm
-endif
+if has("autocmd")
+  " Enabled file type detection
+  " Use the default filetype settings. If you also want to load indent files
+  " to automatically do language-dependent indenting add 'indent' as well.
+  filetype plugin indent on
+
+  augroup vimrc_autocmd
+    "autocmd FileType sh set expandtab
+    "autocmd BufRead,BufNewFile *.py set expandtab
+    " Don't ignore whitespace in python diffs
+    autocmd BufRead,BufNewFile *.py set diffopt-=iwhite
+
+    " Folding
+    " Set foldlevel to the highest foldlevel in the current file
+    autocmd BufWinEnter * let &foldlevel = max(map(range(1, line('$')), 'foldlevel(v:val)'))
+
+    " Move to first diff when in diff mode
+    if &diff
+        au VimEnter * exec "normal \]c"
+    endif
+  augroup END
+endif " has("autocmd")
+
+" Aesthetics
+
 
 " Enable true color
+set t_Co=256
 let &t_8f="\<Esc>[38;2;%lu;%lu;%lum"
 let &t_8b="\<Esc>[48;2;%lu;%lu;%lum"
 set termguicolors
 
-" Make p in Visual mode replace the selected text with the "" register.
-vnoremap p <Esc>:let current_reg = @"<CR>gvdi<C-R>=current_reg<CR><Esc>
-
-syntax on
-
-if has("autocmd")
- " Enabled file type detection
- " Use the default filetype settings. If you also want to load indent files
- " to automatically do language-dependent indenting add 'indent' as well.
- filetype plugin on
-
- autocmd BufRead,BufNewFile *.py set expandtab
- autocmd FileType sh set expandtab
- autocmd BufRead,BufNewFile *.py set diffopt=filler,context:3000
-endif " has ("autocmd")
-
-" Some Debian-specific things
-augroup filetype
-  au BufRead reportbug.*		set ft=mail
-  au BufRead reportbug-*		set ft=mail
-augroup END
-
-" Set paper size from /etc/papersize if available (Debian-specific)
-if filereadable('/etc/papersize')
-  let s:papersize = matchstr(system('/bin/cat /etc/papersize'), '\p*')
-  if strlen(s:papersize)
-    let &printoptions = "paper:" . s:papersize
-  endif
-  unlet! s:papersize
+packadd! dracula
+if !exists("g:syntax_on")
+    syntax enable
 endif
-
-" The following are commented out as they cause vim to behave a lot
-" different from regular vi. They are highly recommended though.
-"set showcmd		" Show (partial) command in status line.
-set showmatch		" Show matching brackets.
-"set ignorecase		" Do case insensitive matching
-"set incsearch		" Incremental search
-set autowrite		" Automatically save before commands like :next and :make
-
-" these are safer for navigating diffs
-map ]j ]c
-map ]k [c
-
-" This is used during merges
-map ]t :diffget 2<enter>:diffupdate<enter>
-
-map d1 :diffget 1<enter>:diffupdate<enter>
-map d2 :diffget 2<enter>:diffupdate<enter>
-map d3 :diffget 3<enter>:diffupdate<enter>
-map d4 :diffget 4<enter>:diffupdate<enter>
-
-" Move to first diff when in diff mode
-if &diff
-    au VimEnter * exec "normal \]c"
-endif
-
-" quick jump to the other C++ file
-command! Cfile :e %:r.cpp
-command! Hfile :e %:r.h
-command! Csplit :split %:r.cpp
-command! Hsplit :split %:r.h
-command! Cvsplit :vsplit %:r.cpp
-command! Hvsplit :vsplit %:r.h
-
-"command! Diff :CVSVimDiff
-"command! Diff :SVNVimDiff
-command! Diff :VCSVimDiff
-
-" Set up ctags
-" set tags=./tags,tags,~/linden/tags
-
-" Map ,t to rebuild ctags in the current directory.
-nmap ,t :!(cd %:p:h;ctags *.{cpp,h})&<CR><CR>
-nnoremap <silent> <F8> :Tlist<CR>
-nnoremap <silent> <F7> :TlistSync<CR>
-nnoremap <silent> <F6> :TlistUpdate<CR>
-nnoremap <silent> <F5> :TlistShowPrototype<CR>
-
-" some abbreviations
-abbreviate @a std::cout<space><<
-abbreviate @b <<<space>std::endl;<space><tab>//<space>adebug
-abbreviate @c //-----------------------------------------------------------------------------
-abbreviate @d // adebug
-abbreviate @i if()<return>{<return>}
-abbreviate @e else<return>{<return>}
-abbreviate @f if()<return>{<return>}<return>else<return>{<return>}<return>else<return>{<return>}
-abbreviate @p {<return>}
-
-set title
-set titleold=""
-set listchars=tab:>-
-set list
-set tabstop=4
-set autoindent
- set expandtab
-set shiftwidth=4
-set smarttab
-set hlsearch
-set diffopt=filler,context:3000,iwhite
-set formatoptions=qln
-
-map t :cn<Enter>
-map T :cp<Enter>
-
-let g:rainbow_active = 1
-
-" let mapleader = ","
-" let $ADDED = '~/.vim/added/'
-
-" map <Leader>cd :exe 'cd ' . expand ("%:p:h")<CR>
-" nmap <F1> :w<CR>
-" imap <F1> <ESC>:w<CR>a
-" map <F8> gg"+yG
-
-let VCSCommandSplit = 'vertical'
-
-"""""""""""""""""" POWERLINE """""""""""""""""
-"if (v:version > 800) && !empty($POWERLINE_REPO)
-"    set rtp+=$POWERLINE_REPO/bindings/vim/
-"    set laststatus=2
-"endif
-"""""""""""""""""" POWERLINE """""""""""""""""
-
-"if isdirectory($GOPATH)
-"  call pathogen#infect() 
-"endif
-
-set ttymouse=xterm2
-set mouse=a
-
-vmap <C-c> y:Oscyank<cr>
-xmap <F7> y:Oscyank<cr>
-
-nmap <F12> :call <SID>SynStack()<CR>
-function! <SID>SynStack()
-  if !exists("*synstack")
-    return
-  endif
-  echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
-endfunc
-
-
-execute pathogen#infect()
-
-" colorscheme ChocolateLiquor
-" colorscheme xylor
-" colorscheme carvedwood
-" colorscheme jellybeans
 colorscheme dracula
 highlight Normal ctermbg=None
+
+" Highlight any characters in lines that are too long.
+"set colorcolumn=81
+"if has("autocmd")
+"  augroup vimrc_overlength
+"    autocmd BufEnter * highlight OverLength ctermbg=darkgrey guibg=#592929
+"    autocmd BufEnter * match OverLength /\%81v.*/
+"  augroup END
+"endif " has("autocmd")
+
+"" Mappings and shortcuts
+"
+"" Miscellaneous 
+"
+"inoremap <F1> <ESC>
+"nnoremap <F1> <ESC>
+"vnoremap <F1> <ESC>
+"au FocusLost * :wa
+"vnoremap . :norm.<CR>
+"
+"" Leader shortcuts
+"
+"let mapleader = ","
+"nnoremap <leader>W :%s/\s\+$//<cr>:let @/=''<CR>
+"nnoremap <leader>a :Ack
+"nnoremap <leader>ft Vatzf
+"nnoremap <leader>S ?{<CR>jV/^\s*\}?$<CR>k:sort<CR>:noh<CR>
+"nnoremap <leader>q gqip
+"nnoremap <leader>v V`]
+"nnoremap <leader>ev <C-w><C-v><C-l>:e $MYVIMRC<cr>
+"nnoremap <leader>w <C-w>v<C-w>l
+"nnoremap <leader>j VipJ
+"nnoremap <leader>q gqip
+"nnoremap <leader>f 1z=
+"nnoremap <leader>s ]s
+"nnoremap <leader>u :!git pull website master && git commit -am 'Standard commit.' && git push website master<CR><CR>
+"nnoremap <leader>p :!git commit -am 'Standard commit.' && git push origin master<CR><CR>
+"nnoremap <leader>d :read !date<CR>
+"nnoremap <leader>r :!!<CR>
+"nnoremap <leader>m :normal @a
+"nnoremap <leader>l :CtrlP<CR>
+"nnoremap <leader>nt :NERDTree<CR>
+"nnoremap <leader>s :set spell!<CR>
+"nnoremap <leader>n :set nonumber!<CR>
+"nnoremap <leader>rn :set norelativenumber!<CR>
+"nnoremap <leader>c :nohl<CR>
+"nnoremap <leader>pa :set nopaste!<CR>
+"nnoremap <leader>rc :so $MYVIMRC<CR>
+"nnoremap <leader>b :BlogSave publish<CR>
+""nnoremap <leader>r :! /Users/daniel/Documents/whup.sh<CR><CR>
+"nnoremap <leader>h :set ft=HTML<CR><CR>
+"
+"" Control shortcuts
+"
+"nnoremap <C-h> <C-w>h
+"nnoremap <C-j> <C-w>j
+"nnoremap <C-k> <C-w>k
+"nnoremap <C-l> <C-w>l
 

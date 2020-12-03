@@ -1,15 +1,24 @@
 [submodule "bundle/dracula"]
-	path = bundle/dracula
+	path = pack/plugins/start/dracula
 	url = git@github.com:dracula/vim.git
 [submodule "bundle/vim-osc52"]
-	path = bundle/vim-osc52
+	path = pack/plugins/start/vim-osc52
 	url = git@github.com:fcpg/vim-osc52.git
 [submodule "bundle/vim-dirdiff"]
-	path = bundle/vim-dirdiff
+	path = pack/plugins/start/vim-dirdiff
 	url = git://github.com/will133/vim-dirdiff.git
 [submodule "bundle/vim-airline"]
-	path = bundle/vim-airline
+	path = pack/plugins/start/vim-airline
 	url = https://github.com/vim-airline/vim-airline
 [submodule "bundle/vim-airline-themes"]
-	path = bundle/vim-airline-themes
+	path = pack/plugins/start/vim-airline-themes
 	url = https://github.com/vim-airline/vim-airline-themes
+[submodule "bundle/vim-signify"]
+	path = pack/plugins/start/vim-signify
+	url = https://github.com/mhinz/vim-signify
+[submodule "bundle/vim-colorschemes"]
+	path = pack/plugins/start/vim-colorschemes
+	url = https://github.com/flazz/vim-colorschemes.git
+[submodule "bundle/rainbow"]
+	path = pack/plugins/start/rainbow
+	url = https://github.com/luochen1990/rainbow.git
