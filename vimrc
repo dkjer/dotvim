@@ -2,6 +2,8 @@
 
 " Basic Settings
 
+set ttymouse=xterm2
+set mouse=a
 set shell=/bin/zsh
 set clipboard^=unnamed,unnamedplus
 " Normally we use vim-extensions. If you want true vi-compatibility
