@@ -18,7 +18,7 @@ set shiftwidth=4
 set softtabstop=4
 set expandtab
 if has("mouse")  " Don't show tabs/trailing spaces if copy/paste will show them
-    set list lcs=trail:·,tab:»· " Show tabs and trailing spaces
+    set list lcs=trail:·,tab:»·,nbsp:! " Show tabs and trailing spaces
 endif
 set encoding=utf-8
 set scrolloff=3
