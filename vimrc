@@ -70,6 +70,9 @@ if has("autocmd")
     " Don't ignore whitespace in python diffs
     autocmd BufRead,BufNewFile *.py set diffopt-=iwhite
 
+    " Set syntax on env files
+    autocmd BufRead,BufNewFile *.envrc set syntax=sh
+
     " Folding
     " Set foldlevel to the highest foldlevel in the current file
     autocmd BufWinEnter * let &foldlevel = max(map(range(1, line('$')), 'foldlevel(v:val)'))
