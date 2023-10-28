@@ -1,9 +1,9 @@
 [submodule "bundle/dracula"]
 	path = pack/plugins/start/dracula
-	url = git@github.com:dracula/vim.git
+	url = https://github.com/dracula/vim.git
 [submodule "bundle/vim-osc52"]
 	path = pack/plugins/start/vim-osc52
-	url = git@github.com:fcpg/vim-osc52.git
+	url = https://github.com/fcpg/vim-osc52.git
 [submodule "bundle/vim-dirdiff"]
 	path = pack/plugins/start/vim-dirdiff
 	url = git://github.com/will133/vim-dirdiff.git
