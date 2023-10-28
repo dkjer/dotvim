@@ -6,7 +6,7 @@
 	url = https://github.com/fcpg/vim-osc52.git
 [submodule "bundle/vim-dirdiff"]
 	path = pack/plugins/start/vim-dirdiff
-	url = git://github.com/will133/vim-dirdiff.git
+	url = https://github.com/will133/vim-dirdiff.git
 [submodule "bundle/vim-airline"]
 	path = pack/plugins/start/vim-airline
 	url = https://github.com/vim-airline/vim-airline
